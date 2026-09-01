@@ -7,3 +7,4 @@
 - To practice golang
 - To test out my C networking library sgnet
 - learn simple event driven TUI (tcell)?
+- try out some new stuff, starship?
