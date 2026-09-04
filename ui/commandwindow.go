@@ -13,16 +13,17 @@ type CommandWindow struct {
 }
 
 func (w *CommandWindow) Initialize() {
-	SetWindowSizeByPercent(&w.WindowBase, 0.50, 0.20, 2, 1)
+	SetWindowSizeByPercent(&w.WindowBase, 0.80, 0.20, 2, 1)
+	SetWindowLocationByPercent(&w.WindowBase, 0.00, 0.80, 0, 0)
 	w.cursorX = 1
 	w.cursorY = 1
 }
 
 func (w *CommandWindow) Draw() {
-	drawBox(w.Screen, 0, 0, w.W, w.H, tcell.StyleDefault, "Commands")
-	drawText(w.Screen, 1, 1, 1, 1, tcell.StyleDefault, ">")
-	drawText(w.Screen, 2, 1, w.W - 2, w.H - 2, tcell.StyleDefault, w.typingString)
-	w.Screen.ShowCursor(w.cursorX, w.cursorY)
+	drawBox(w.Screen, w.X, w.Y, w.W + w.X, w.H + w.Y, tcell.StyleDefault, "Commands")
+	// drawText(w.Screen, w.X+1, w.Y+1, 1, 1, tcell.StyleDefault, ">")
+	// drawText(w.Screen, w.X+1, w.Y+1, w.W-2, w.H-2, tcell.StyleDefault, w.typingString)
+	// w.Screen.ShowCursor(w.cursorX, w.cursorY)
 }
 
 func (w *CommandWindow) HandleEvent(e *events.Event) {

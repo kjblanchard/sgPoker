@@ -57,10 +57,10 @@ func drawBox(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string)
 	//Handle Drawing title
 	if text != "" {
 		halfWord := len(text) / 2
-		half := x2 / 2
+		half := (x2 - x1) / 2
 		titleLoc := half - halfWord
 		for i, l := range text {
-			s.Put(titleLoc+i, y1, string(l), style)
+			s.Put(x1+titleLoc+i, y1, string(l), style)
 
 		}
 
@@ -92,6 +92,12 @@ func SetWindowSizeByPercent(w *WindowBase, x float32, y float32, xo int, yo int)
 	//determine size based on screen
 	w.W = int(float32(screenX)*x) - xo
 	w.H = int(float32(screenY)*y) - yo
+}
+
+func SetWindowLocationByPercent(w *WindowBase, x float32, y float32, xo int, yo int) {
+	//determine size based on screen
+	w.X = int(float32(screenX)*x) - xo
+	w.Y = int(float32(screenY)*y) - yo
 }
 
 type WindowBase struct {

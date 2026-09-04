@@ -45,6 +45,15 @@ func main() {
 	var commandW ui.CommandWindow
 	commandW.Screen = s
 	commandW.Initialize()
+	var messageW ui.MessageWindow
+	messageW.Screen = s
+	messageW.Initialize()
+	var playW ui.PlayAreaWindow
+	playW.Screen = s
+	playW.Initialize()
+	var chatW ui.ChatWindow
+	chatW.Screen = s
+	chatW.Initialize()
 
 	for {
 		s.Show() //Update screen
@@ -75,7 +84,13 @@ func main() {
 		}
 		//Pass Event to all Windows to perform their update
 		commandW.HandleEvent(&ev)
+		messageW.HandleEvent(&ev)
+		playW.HandleEvent(&ev)
+		chatW.HandleEvent(&ev)
 		//Draw all windows
 		commandW.Draw()
+		messageW.Draw()
+		playW.Draw()
+		chatW.Draw()
 	}
 }
