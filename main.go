@@ -39,7 +39,7 @@ func main() {
 		}
 	}
 	defer quit()
-	busChannel := make(chan events.Event)
+	events.EventBus = make(chan events.Event, 50)
 
 	//Create and initialize all windows
 	var commandW ui.CommandWindow
@@ -54,33 +54,39 @@ func main() {
 	var chatW ui.ChatWindow
 	chatW.Screen = s
 	chatW.Initialize()
-
+	//Handle buildin tcell events, wrap then in a event
+	go func() {
+		for {
+			ev := <-s.EventQ()
+			e := events.Event{Type: events.EventTypeTCell, Data: ev}
+			events.EventBus <- e
+		}
+	}()
+	//Handle networking messages
 	for {
 		s.Show() //Update screen
-		//Handle buildin tcell events, wrap then in a event
-		go func() {
-			ev := <-s.EventQ()
-			e := events.Event{Type: 0, Data: ev}
-			busChannel <- e
-		}()
-		//Handle networking messages
 		//Wait on events from our event bus, could be a builtin event, network or from any of our windows sending events
-		ev := <-busChannel
-		evc, ok := ev.Data.(tcell.Event)
-		if !ok {
-			log.Print("Not a correct type!")
-			continue
-		}
-		// Handle if we should quit, resize event, or  something else.
-		switch ev := evc.(type) {
-		case *tcell.EventResize:
-			s.Sync()
-		case *tcell.EventKey:
-			if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
-				return
-			} else if ev.Key() == tcell.KeyCtrlL {
-				s.Sync()
+		ev := <-events.EventBus
+		if func() bool {
+			evc, ok := ev.Data.(tcell.Event)
+			if !ok {
+				return false
 			}
+			// Handle if we should quit, resize event, or  something else.
+			switch ev := evc.(type) {
+			case *tcell.EventResize:
+				s.Sync()
+			case *tcell.EventKey:
+				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
+					return true
+				} else if ev.Key() == tcell.KeyCtrlL {
+					s.Sync()
+				}
+			}
+			return false
+
+		}() {
+			return
 		}
 		//Pass Event to all Windows to perform their update
 		commandW.HandleEvent(&ev)

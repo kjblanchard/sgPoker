@@ -5,8 +5,17 @@ type Event struct {
 	Data any
 }
 
-func UpdateEvents()  {
-	
+type EventTypes int
+
+const (
+	EventTypeTCell = iota
+	EventTypeStatusMessage
+)
+
+var (
+	EventBus chan Event
+)
+
+func UpdateEvents() {
+
 }
-
-
