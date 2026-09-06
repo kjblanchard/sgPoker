@@ -9,7 +9,6 @@ import (
 	"github.com/kjblanchard/sgPoker/ui"
 )
 
-
 func main() {
 	defStyle := tcell.StyleDefault.Background(color.Reset).Foreground(color.Reset)
 
