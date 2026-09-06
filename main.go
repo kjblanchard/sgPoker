@@ -1,12 +1,11 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gdamore/tcell/v3"
 	"github.com/gdamore/tcell/v3/color"
 	"github.com/kjblanchard/sgPoker/events"
 	"github.com/kjblanchard/sgPoker/ui"
+	"log"
 )
 
 func main() {
