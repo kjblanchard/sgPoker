@@ -10,6 +10,18 @@ var (
 	screenY int
 )
 
+// Helper to draw the box outline
+// t Text - title to draw if any
+func (w *WindowBase) drawBoxOutline(t string) {
+	drawBox(w.Screen, w.X, w.Y, w.W+w.X, w.H+w.Y, tcell.StyleDefault, t)
+}
+
+// Helper to draw the text within a window
+// t string - text to draw if any
+func (w *WindowBase) drawText(t string) {
+	drawText(w.Screen, w.X+1, w.Y+1, w.X+2, w.Y+1, tcell.StyleDefault, ">")
+}
+
 func drawText(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {
 	if text == "" {
 		return
