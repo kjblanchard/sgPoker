@@ -3,7 +3,6 @@ package ui
 import (
 	"slices"
 
-	"github.com/gdamore/tcell/v3"
 	"github.com/kjblanchard/sgPoker/events"
 )
 
@@ -21,7 +20,8 @@ func (w *MessageWindow) Draw() {
 	w.drawBoxOutline("Messages")
 	var i int = 0
 	for _, m := range slices.Backward(w.messages) {
-		drawText(w.Screen, w.X+1, w.Y+1+i, w.X+w.W-2, w.H-1, tcell.StyleDefault, m)
+		w.drawText(0, i, 0, 0, m)
+		/* drawText(w.Screen, w.X+1, w.Y+1+i, w.X+w.W-2, w.H-1, tcell.StyleDefault, m) */
 		i++
 	}
 }

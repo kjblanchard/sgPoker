@@ -10,6 +10,7 @@ type EventTypes int
 const (
 	EventTypeTCell = iota
 	EventTypeStatusMessage
+ EventTypeCommand
 )
 
 var (

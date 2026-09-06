@@ -22,25 +22,32 @@ func (w *CommandWindow) Initialize() {
 }
 
 func (w *CommandWindow) Draw() {
-	drawBox(w.Screen, w.X, w.Y, w.W+w.X, w.H+w.Y, tcell.StyleDefault, "Commands")
-	drawText(w.Screen, w.X+1, w.Y+1, w.X+2, w.Y+1, tcell.StyleDefault, ">")
-	drawText(w.Screen, w.X+2, w.Y+1, w.W-2, w.H-2, tcell.StyleDefault, w.typingString)
-	// w.Screen.ShowCursor(w.cursorX+len(w.typingString)/w.W, w.cursorY%w.H)
+	w.drawBoxOutline("Commands")
+	w.drawText(0, 0, 2, 2, ">")
+	w.drawText(1, 0, 0, 0, w.typingString)
 }
 
 func (w *CommandWindow) HandleEvent(e *events.Event) {
-	//Handle tcell types
+	//Handle tcell types, we need keypresses
 	if e.Type == events.EventTypeTCell {
 		et, ok := e.Data.(tcell.Event)
 		if !ok {
 			return
 		}
-		// Handle if we should quit, resize event, or  something else.
 		switch ev := et.(type) {
 		case *tcell.EventKey:
+			if ev.Key() == tcell.KeyBackspace && len(w.typingString) > 0 {
+				w.typingString = w.typingString[:len(w.typingString)-1]
+				break
+			} else if ev.Key() == tcell.KeyEnter {
+				e := events.Event{Type: events.EventTypeStatusMessage, Data: fmt.Sprintf("Sending command %s", w.typingString)}
+				events.EventBus <- e
+				e = events.Event{Type: events.EventTypeCommand, Data: w.typingString}
+				events.EventBus <- e
+				w.typingString = ""
+				break
+			}
 			w.typingString += string(ev.Str())
-			e := events.Event{Type: events.EventTypeStatusMessage, Data: fmt.Sprintf("Just pressed %s making %s", ev.Str(), w.typingString)}
-			events.EventBus <- e
 		}
 
 	}
