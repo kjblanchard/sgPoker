@@ -18,8 +18,16 @@ func (w *WindowBase) drawBoxOutline(t string) {
 
 // Helper to draw the text within a window
 // t string - text to draw if any
-func (w *WindowBase) drawText(t string) {
-	drawText(w.Screen, w.X+1, w.Y+1, w.X+2, w.Y+1, tcell.StyleDefault, ">")
+func (w *WindowBase) drawText(x int, y int, maxX int, maxY int, t string) {
+	wMax := w.X + w.W
+	if maxX == 0 || maxX > wMax {
+		maxX = wMax
+	}
+	wMaxY := w.Y + w.H
+	if maxY == 0 || maxY > wMaxY {
+		maxY = wMaxY
+	}
+	drawText(w.Screen, w.X+x+1, w.Y+y+1, maxX, maxY, tcell.StyleDefault, t)
 }
 
 func drawText(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {

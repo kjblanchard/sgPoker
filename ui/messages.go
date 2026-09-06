@@ -18,7 +18,7 @@ func (w *MessageWindow) Initialize() {
 }
 
 func (w *MessageWindow) Draw() {
-	drawBox(w.Screen, w.X, w.Y, w.W+w.X, w.H+w.Y, tcell.StyleDefault, "Messages")
+	w.drawBoxOutline("Messages")
 	var i int = 0
 	for _, m := range slices.Backward(w.messages) {
 		drawText(w.Screen, w.X+1, w.Y+1+i, w.X+w.W-2, w.H-1, tcell.StyleDefault, m)

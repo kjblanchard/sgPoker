@@ -48,6 +48,7 @@ func main() {
 	var messageW ui.MessageWindow
 	messageW.Screen = s
 	messageW.Initialize()
+
 	var playW ui.PlayAreaWindow
 	playW.Screen = s
 	playW.Initialize()

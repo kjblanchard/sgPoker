@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"github.com/gdamore/tcell/v3"
 	"github.com/kjblanchard/sgPoker/events"
 )
 
@@ -15,7 +14,7 @@ func (w *ChatWindow) Initialize() {
 }
 
 func (w *ChatWindow) Draw() {
-	drawBox(w.Screen, w.X, w.Y, w.W+w.X, w.H+w.Y, tcell.StyleDefault, "Chat")
+	w.drawBoxOutline("Chat")
 }
 
 func (w *ChatWindow) HandleEvent(e *events.Event) {
