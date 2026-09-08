@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gdamore/tcell/v3"
+	"github.com/kjblanchard/sgPoker/cards"
 	"github.com/kjblanchard/sgPoker/events"
 )
 
@@ -27,6 +28,23 @@ func (w *CommandWindow) Draw() {
 	w.drawText(1, 0, 0, 0, w.typingString)
 }
 
+func HandleCommand(c string) {
+	if c == "draw" {
+		d := cards.Deck{}
+		d.Init()
+		d.Shuffle()
+		n, c := d.Draw()
+		if n == 0 {
+			e := events.Event{Type: events.EventTypeStatusMessage, Data: "Could not draw card!"}
+			events.EventBus <- e
+			return
+		}
+		e := events.Event{Type: events.EventTypeStatusMessage, Data: fmt.Sprintf("Draw card: %s", &c)}
+		events.EventBus <- e
+	}
+
+}
+
 func (w *CommandWindow) HandleEvent(e *events.Event) {
 	//Handle tcell types, we need keypresses
 	if e.Type == events.EventTypeTCell {
@@ -42,13 +60,12 @@ func (w *CommandWindow) HandleEvent(e *events.Event) {
 			} else if ev.Key() == tcell.KeyEnter {
 				e := events.Event{Type: events.EventTypeStatusMessage, Data: fmt.Sprintf("Sending command %s", w.typingString)}
 				events.EventBus <- e
-				e = events.Event{Type: events.EventTypeCommand, Data: w.typingString}
-				events.EventBus <- e
+				HandleCommand(w.typingString)
+
 				w.typingString = ""
 				break
 			}
 			w.typingString += string(ev.Str())
 		}
-
 	}
 }
