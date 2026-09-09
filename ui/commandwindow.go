@@ -29,17 +29,12 @@ func (w *CommandWindow) Draw() {
 }
 
 func HandleCommand(c string) {
-	if c == "draw" {
-		d := cards.Deck{}
-		d.Init()
-		d.Shuffle()
-		n, c := d.Draw()
-		if n == 0 {
-			e := events.Event{Type: events.EventTypeStatusMessage, Data: "Could not draw card!"}
-			events.EventBus <- e
-			return
-		}
-		e := events.Event{Type: events.EventTypeStatusMessage, Data: fmt.Sprintf("Draw card: %s", &c)}
+	if c == "blackjack" {
+		e := events.Event{Type: cards.BlackjackEventStartGame, Data: nil}
+		events.EventBus <- e
+	}
+	if c == "deal" {
+		e := events.Event{Type: cards.BlackjackEventStartTurn, Data: nil}
 		events.EventBus <- e
 	}
 

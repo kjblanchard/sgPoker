@@ -127,22 +127,37 @@ func (d *Deck) DrawMultiple(n int) (int, []Card) {
 	return n, c
 }
 
-func (d *Deck) AddCard(c Card) {
-	*d = append(*d, c)
+func (d *Deck) AddCard(c ...Card) {
+	for _, v := range c {
+		*d = append(*d, v)
+	}
 }
 
 func (d *Deck) AddMultipleCards(c []Card) {
 	*d = append(*d, c...)
 }
 
-func (d *Deck) AddDeck(d2 *Deck) {
-	*d = append(*d, (*d2)...)
+// Adds decks from d2 to d, removing all from d2
+func (d *Deck) AddDeck(d2 ...*Deck) {
+	for _, v := range d2 {
+		*d = append(*d, (*v)...)
+		clear(*v)
+	}
+}
+
+func (d *Deck) CountCards(d2 ...*Deck) int {
+	c := len(*d)
+	for _, v := range d2 {
+		c += len(*v)
+	}
+	return c
 }
 
 // Shuffles remaining cards in the deck
 func (d *Deck) Shuffle() {
 	rand.Shuffle(len(*d), func(i, j int) {
 		(*d)[i], (*d)[j] = (*d)[j], (*d)[i]
+
 	})
 
 }

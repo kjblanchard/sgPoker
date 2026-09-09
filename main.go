@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gdamore/tcell/v3"
 	"github.com/gdamore/tcell/v3/color"
+	"github.com/kjblanchard/sgPoker/cards"
 	"github.com/kjblanchard/sgPoker/events"
 	"github.com/kjblanchard/sgPoker/ui"
 
@@ -94,6 +95,8 @@ func main() {
 		messageW.HandleEvent(&ev)
 		playW.HandleEvent(&ev)
 		chatW.HandleEvent(&ev)
+		//process all games
+		cards.BlackjackHandleEvent(&ev)
 		//Draw all windows
 		commandW.Draw()
 		messageW.Draw()
