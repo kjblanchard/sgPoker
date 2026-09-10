@@ -141,7 +141,7 @@ func (d *Deck) AddMultipleCards(c []Card) {
 func (d *Deck) AddDeck(d2 ...*Deck) {
 	for _, v := range d2 {
 		*d = append(*d, (*v)...)
-		clear(*v)
+		*v = (*v)[:0]
 	}
 }
 
